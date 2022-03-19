@@ -2,14 +2,16 @@ package main
 
 import (
 	"log"
-	"myapp/data"
-	"myapp/handlers"
+	"myapp/pkg/infrastructure/config"
+	"myapp/pkg/infrastructure/handlers"
+	"myapp/pkg/infrastructure/persistence"
+	"myapp/pkg/infrastructure/routes"
 	"os"
 
 	"github.com/ald3v/celeritas"
 )
 
-func initApplication() *application {
+func initApplication() *config.Application {
 	path, err := os.Getwd()
 	if err !=nil{
 		log.Fatal(err)
@@ -27,14 +29,14 @@ func initApplication() *application {
 		App: cel,
 	}
 
-	app := &application{
+	app := &config.Application{
 		App: cel,
 		Handlers: myHandlers,
 	}
 
-	app.App.Routes = app.routes()
+	app.App.Routes = routes.AddRoutes(app)
 
-	app.Models = data.New(app.App.DB.Pool)
+	app.Models = persistence.New(app.App.DB.Pool)
 
 	return app
 
