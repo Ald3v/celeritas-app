@@ -1,17 +1,15 @@
-package main
+package config
 
 import (
 	"log"
-	"myapp/pkg/infrastructure/config"
 	"myapp/pkg/infrastructure/handlers"
 	"myapp/pkg/infrastructure/persistence"
-	"myapp/pkg/infrastructure/routes"
 	"os"
 
 	"github.com/ald3v/celeritas"
 )
 
-func initApplication() *config.Application {
+func InitApplication() *application {
 	path, err := os.Getwd()
 	if err !=nil{
 		log.Fatal(err)
@@ -23,18 +21,18 @@ func initApplication() *config.Application {
 		log.Fatal(err)
 	}
 
-	cel.AppName = "myapp"
+	cel.AppName = "app"
 	
 	myHandlers := &handlers.Handlers{
 		App: cel,
 	}
 
-	app := &config.Application{
+	app := &application{
 		App: cel,
 		Handlers: myHandlers,
 	}
 
-	app.App.Routes = routes.AddRoutes(app)
+	app.App.Routes = app.routes()
 
 	app.Models = persistence.New(app.App.DB.Pool)
 

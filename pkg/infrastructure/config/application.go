@@ -7,7 +7,7 @@ import (
 	"github.com/ald3v/celeritas"
 )
 
-type Application struct {
+type application struct {
 	App      *celeritas.Celeritas
 	Handlers *handlers.Handlers
 	Models   persistence.Models
